@@ -39,9 +39,13 @@ pip install -r requirements.txt
 From Examples:https://github.com/apache/beam/tree/master/sdks/python/apache_beam/examples
 - Word count minimal: https://github.com/apache/beam/blob/master/sdks/python/apache_beam/examples/wordcount_minimal.py
 - Word count minimal test: https://github.com/apache/beam/blob/master/sdks/python/apache_beam/examples/wordcount_minimal_test.py
+
 ```
 # Run Direct Runner
 python wordcount_minimal.py --runner DirectRunner --input ./test/input/ch1_les_miserables.txt --output ./test/output/word_counts_ch1_les_miserables.txt
+
+# Run bash for the previus command
+bash run_wordcount_minimal_ch1_les_miserables.sh
 ```
 
 6. Config base project (app, src, test ... setup.py, etc.).
@@ -53,7 +57,7 @@ python wordcount_minimal.py --runner DirectRunner --input ./test/input/ch1_les_m
     Reference Doc for deploy in GCP:
     - Compute Engine:
     - Airflow in GCP: https://cloud.google.com/blog/products/data-analytics/different-ways-to-run-apache-airflow-on-google-cloud
-    - Check terraform, for deploy scpecific free Tier for test at GCP. 
+    - Check terraform, for deploy specific Free-Tier for test at GCP. 
     
 
 

@@ -25,7 +25,21 @@ pip install --upgrade 'apache-beam[gcp]'
 
 3. Created requirements.txt from current venv
 ```
-# Create Requirement
-pip freeze
+# Create Requirements
+pip freeze > requirements.txt
 ```
+
+4. Install requirements.txt
+```
+# Install Requirements
+pip install -r requirements.txt
+```
+
+5. Example: to Run wordcount_minimal.py with DirectRunner
+```
+# Run Direct 
+python wordcount_minimal.py --runner DirectRunner --input ./test/input/ch1_les_miserables.txt --output ./test/output/word_counts_ch1_les_miserables.txt
+```
+
+
 

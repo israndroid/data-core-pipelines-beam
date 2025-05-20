@@ -1,8 +1,7 @@
 # data-core-pipelines-beam
 A TDD core project to develop Apache Beam with Python SDK
 
-## Deploy by environment
-### LOCAL ENV
+# Current Steps to create this repo
 
 1. Create Venv
 ```
@@ -24,11 +23,9 @@ pip install 'apache-beam[gcp]'
 pip install --upgrade 'apache-beam[gcp]'
 ```
 
-3. Install requirements.txt from current venv
+3. Created requirements.txt from current venv
 ```
-# Install Requirements
-pip install -r requirements.txt
+# Create Requirement
+pip freeze
 ```
-
-
 

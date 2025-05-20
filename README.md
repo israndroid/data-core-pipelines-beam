@@ -30,5 +30,9 @@ pip install --upgrade 'apache-beam[gcp]'
 pip install -r requirements.txt
 ```
 
+4. Setup Local Environment
+
+
+
 
 

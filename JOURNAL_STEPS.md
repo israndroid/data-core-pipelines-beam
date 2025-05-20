@@ -44,3 +44,18 @@ From Examples:https://github.com/apache/beam/tree/master/sdks/python/apache_beam
 python wordcount_minimal.py --runner DirectRunner --input ./test/input/ch1_les_miserables.txt --output ./test/output/word_counts_ch1_les_miserables.txt
 ```
 
+6. Config base project (app, src, test ... setup.py, etc.).
+
+    6.1 Local Flow: Will be able to run dataflow jobs. The base project will be can run Apache Beam pipelines in local with DirectRunner, and triggered by Airflow Dags in local env (or an Dockerized Dev Environment).
+
+    6.2 The Cloud aproach (GCP): Using Airflow at Compute Engine, run Apache Beam Pipelines triggered by Airflow in a preemptible vm.
+
+    Reference Doc for deploy in GCP:
+    - Compute Engine:
+    - Airflow in GCP: https://cloud.google.com/blog/products/data-analytics/different-ways-to-run-apache-airflow-on-google-cloud
+    - Check terraform, for deploy scpecific free Tier for test at GCP. 
+    
+
+
+
+

@@ -36,10 +36,11 @@ pip install -r requirements.txt
 ```
 
 5. Example: to Run wordcount_minimal.py with DirectRunner
+From Examples:https://github.com/apache/beam/tree/master/sdks/python/apache_beam/examples
+- Word count minimal: https://github.com/apache/beam/blob/master/sdks/python/apache_beam/examples/wordcount_minimal.py
+- Word count minimal test: https://github.com/apache/beam/blob/master/sdks/python/apache_beam/examples/wordcount_minimal_test.py
 ```
-# Run Direct 
+# Run Direct Runner
 python wordcount_minimal.py --runner DirectRunner --input ./test/input/ch1_les_miserables.txt --output ./test/output/word_counts_ch1_les_miserables.txt
 ```
-
-
 

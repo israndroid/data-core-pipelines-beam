@@ -31,7 +31,7 @@ pip install -r requirements.txt
 ```
 
 4. Setup Local Environment
-
+    WIP: check JOURNAL_STEPS.md for current working DONE steps to setup data-core-pipelines-beam project
 
 
 

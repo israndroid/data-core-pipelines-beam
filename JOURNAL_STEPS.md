@@ -10,6 +10,8 @@ A TDD core project to develop Apache Beam with Python SDK
 
     # Activate venv
     . /path/to/directory/bin/activate
+
+    source .venv/bin/activate
     ```
 2. Full list installs applied
     ```

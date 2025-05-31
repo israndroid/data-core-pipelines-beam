@@ -94,6 +94,23 @@ A TDD core project to develop Apache Beam with Python SDK
     - Compute Engine:
     - Airflow in GCP: https://cloud.google.com/blog/products/data-analytics/different-ways-to-run-apache-airflow-on-google-cloud
     - Check terraform, for deploy specific Free-Tier for test at GCP. 
+
+
+7. Build bdist(binary) and sdist (source) for the core-pipeline-beam project
+
+Bui
+```
+# 1st install wheel setuptools for packaging
+pip install wheel setuptools
+
+# 2nd build
+python setup.py sdist bdist_wheel
+```
+
+Or execute the run bash
+```
+bash run_build_wheel.sh
+```
     
 
 

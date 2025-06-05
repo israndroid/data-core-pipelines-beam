@@ -1,5 +1,5 @@
 # data-core-pipelines-beam
-A TDD core project to develop Apache Beam with Python SDK
+A TDD core project to develop Apache Beam Pipelines with Python SDK
 
 ## Deploy by environment
 ### LOCAL ENV

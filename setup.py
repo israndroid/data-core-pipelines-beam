@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name='data-core-pipelines-beam',
-    version='0.0.1',
+    version='0.0.2',
     description='TDD core project to develop Apache Beam with Python SDK',
     author='Israel Martinez @israndroid',
     packages=setuptools.find_packages(

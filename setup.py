@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name='data-core-pipelines-beam',
-    version='0.0.2',
+    version='0.0.3',
     description='TDD core project to develop Apache Beam with Python SDK',
     author='Israel Martinez @israndroid',
     packages=setuptools.find_packages(
@@ -15,6 +15,11 @@ setuptools.setup(
             , 'tests.*'
             ]
     ),
+    entry_points={
+        'console_scripts': [
+            'wordcount_beam=src.modules.wordcount_minimal:main'
+            ] # so this directly refers to a function available in __init__.py
+        },
     install_requires=[
         'apache-beam[gcp]==2.65.0',
         # Puedes agregar otras dependencias aquí si las necesitas

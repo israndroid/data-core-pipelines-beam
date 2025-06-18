@@ -244,6 +244,23 @@ module "ops_agent_policy" {
 }
 ```
 
+* BigQuery bq commands
+
+At VM
+```
+mkdir schemas
+```
+
+```
+bq show --schema --format=prettyjson israndroid-data-core-project:temp_data_core.house_price_rm > /schemas/house_price_rm.json
+```
+
+Upload to bucket data-core project
+```
+gsutil cp house_price_rm.json "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/raw_schemas/house_price_rm.json"
+```
+
+
 
 
 

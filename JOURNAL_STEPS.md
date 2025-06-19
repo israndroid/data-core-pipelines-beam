@@ -71,6 +71,20 @@ A TDD core project to develop Apache Beam with Python SDK
     python -m src.modules.wordcount_minimal --runner DirectRunner --input ./tests/input/ch1_les_miserables.txt --output ./tests/output/word_counts_ch1_les_miserables.txt
     ```
 
+    or equivalent when install pip install data-core-pipelines-beam
+    ```
+    python -m src.modules.wordcount_minimal --runner DirectRunner \
+    --input "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/raw_cl_house_prices/2023-03-08 Precios Casas RM.csv" \
+    --output "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/raw_cl_house_prices_word_counts/2023-03-08-precios-casas-rm.txt"
+    ```
+
+     or using alias wordcount_beam equivalent when install pip install data-core-pipelines-beam
+    ```
+    python -m wordcount_beam --runner DirectRunner \
+    --input "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/raw_cl_house_prices/2023-03-08 Precios Casas RM.csv" \
+    --output "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/raw_cl_house_prices_word_counts/2023-03-08-precios-casas-rm.txt"
+    ```
+
     5.3 Run bash cleaning python cache files
 
     ```

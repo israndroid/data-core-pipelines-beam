@@ -60,22 +60,39 @@ A TDD core project to develop Apache Beam with Python SDK
     ```
 
     5.2 Run bash example :
+
+    5.2.1
     For wordcount minimal Python Apache Beam Pipeline at DirectRunner, from /src/modules/wordcount_minimal.py
 
     ```
     bash run_wordcount_minimal_app_example.sh
     ```
-    or equivalent:
+
+    5.2.2 or equivalent:
     ```
     #!/bin/bash
     python -m src.modules.wordcount_minimal --runner DirectRunner --input ./tests/input/ch1_les_miserables.txt --output ./tests/output/word_counts_ch1_les_miserables.txt
     ```
 
-    or equivalent when install pip install data-core-pipelines-beam
+    5.2.3 or equivalent when install pip install data-core-pipelines-beam: Direct Runnner
     ```
     python -m src.modules.wordcount_minimal --runner DirectRunner \
     --input "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/raw_cl_house_prices/2023-03-08 Precios Casas RM.csv" \
     --output "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/raw_cl_house_prices_word_counts/2023-03-08-precios-casas-rm.txt"
+    ```
+
+    5.2.3 or equivalent when install pip install data-core-pipelines-beam DataFlowRunner: 
+    ```
+    # WIP testing command to deploy job at DataflowRunner
+    python -m src.modules.wordcount_minimal \
+    --runner DataflowRunner \
+    --job_name "wordcount-cl-house-prices" \
+    --input "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/raw_cl_house_prices/2023-03-08 Precios Casas RM.csv" \
+    --output "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/raw_cl_house_prices_word_counts/20230308_precios_casas_rm_dataflow_test.txt" \
+    --project "israndroid-data-core-project" \
+    --region "us-central1" \
+    --staging_location "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/staging" \
+    --temp_location "gs://data-core-project-landing-zone/temp_beam"
     ```
 
     5.3 Run bash cleaning python cache files

@@ -78,13 +78,6 @@ A TDD core project to develop Apache Beam with Python SDK
     --output "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/raw_cl_house_prices_word_counts/2023-03-08-precios-casas-rm.txt"
     ```
 
-     or using alias wordcount_beam equivalent when install pip install data-core-pipelines-beam
-    ```
-    python -m wordcount_beam --runner DirectRunner \
-    --input "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/raw_cl_house_prices/2023-03-08 Precios Casas RM.csv" \
-    --output "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/raw_cl_house_prices_word_counts/2023-03-08-precios-casas-rm.txt"
-    ```
-
     5.3 Run bash cleaning python cache files
 
     ```
@@ -274,7 +267,6 @@ Upload to bucket data-core project
 gsutil cp house_price_rm.json "gs://data-core-project-landing-zone/data_lake_core_web_scrapper/raw_schemas/house_price_rm.json"
 ```
 
+# Develop TODOs
 
-
-
-
+- [ ] define common Main for run different pipelines using commons Ptransforms and utils

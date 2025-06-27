@@ -4,9 +4,24 @@ import logging
 import time
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
+from apache_beam.options.pipeline_options import SetupOptions
 from src.modules.raw_transforms import StandarizeHeader
 from src.modules.io_transforms import IOReadFromText, IOWriteToText
 from config import global_config as GC
+
+def setup_options(argv=None, save_main_session=True):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--runner', dest='runner', default='DirectRunner', choices=['DirectRunner', 'DataflowRunner'], help='Runner to use for the pipeline')
+    parser.add_argument('--env', dest='environment', default='DEV',choices=GC.ENV_OPTIONS, help=f'Environment to run the pipeline ({GC.ENV_DEV}: Local, {GC.ENV_PROD}: pre-prod environment (Example: test at DataFlowRunner), {GC.ENV_PROD}: Production environment)')
+    parser.add_argument('--input_bucket', dest='input_bucket', required=True, help='Path to read RAW file')
+    parser.add_argument('--output_bucket', dest='output_bucket', required=True, help='Path to write STANDARIZED file') 
+    parser.add_argument('--transforms', dest='transforms', default=['IOReadFromText', 'StandarizeHeader', 'IOWriteToText'], help='Raw transform to apply on the input data')
+    parser.add_argument('--date_calc', dest='date_calc', default=datetime.now().strftime('%Y-%m-%d'), help='Date to calculate the data (default: yesterday)')
+
+    know_args, pipeline_args = parser.parse_known_args()
+    pipeline_options = PipelineOptions(pipeline_args)
+    pipeline_options.view_as(SetupOptions).save_main_session = save_main_session
+    return know_args, pipeline_options
 
 def main(pipeline_options, args, date_calc):
     if args.environment == GC.ENV_DEV:
@@ -16,7 +31,7 @@ def main(pipeline_options, args, date_calc):
     elif args.environment == GC.ENV_PROD:
         logging.info(f'Running in {GC.ENV_PROD} environment')
     
-    logging.info(f'Pipeline options parsed: {pipeline_args}')
+    logging.info(f'Pipeline options parsed: {pipeline_options}')
     logging.info(f'Args parsed: {args}')
 
     with beam.Pipeline(options=pipeline_options) as p:
@@ -27,25 +42,17 @@ def main(pipeline_options, args, date_calc):
             pcol_transform_applied.append(
                 pcol_transform_applied[i] | transform(
             ) """
-        pcol_transform_applied = (
-            p | 'IOReadFromText' >> IOReadFromText(input_file=args.input_bucket)
-            | 'StandarizeHeader' >> StandarizeHeader()
-            | 'IOWriteToText' >> IOWriteToText(output_file=args.output_bucket)
+        pcol_transform_applied = (p
+            | 'IOReadFromText' >> IOReadFromText(input_bucket=args.input_bucket)
+            #| 'StandarizeHeader' >> StandarizeHeader()
+            | 'IOWriteToText' >> IOWriteToText(output_bucket=args.output_bucket)
         )
 
     
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--runner', dest='runner', default='DirectRunner', choices=['DirectRunner', 'DataflowRunner'], help='Runner to use for the pipeline')
-    parser.add_argument('--env', dest='environment', default='DEV',choices=GC.ENV_OPTIONS, help=f'Environment to run the pipeline ({GC.ENV_DEV}: Local, {GC.ENV_PROD}: pre-prod environment (Example: test at DataFlowRunner), {GC.ENV_PROD}: Production environment)')
-    parser.add_argument('--input_bucket', dest='input_bucket', required=True, help='Path to read RAW file')
-    parser.add_argument('--output_bucket', dest='input_bucket', required=True, help='Path to write STANDARIZED file') 
-    parser.add_argument('--transforms', dest='transforms', default=['IOReadFromText', 'StandarizeHeader', 'IOWriteToText'], help='Raw transform to apply on the input data')
-    parser.add_argument('--date_calc', dest='date_calc', default=datetime.now().strftime('%Y-%m-%d'), help='Date to calculate the data (default: yesterday)')
-
-    know_args, pipeline_args = parser.parse_known_args()
-    pipeline_options = PipelineOptions(pipeline_args).get_all_options
+    logging.getLogger().setLevel(logging.INFO)
+    know_args, pipeline_options = setup_options(argv=None, save_main_session=True)
 
     start_time = time.time()
     print(f'[start_time: {start_time}] Starting the pipeline... raw.py -> main()')

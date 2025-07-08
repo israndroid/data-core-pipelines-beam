@@ -7,14 +7,15 @@ class IOReadFromText(beam.PTransform):
     This transform is used to read from a text file and create a PCollection
     """
 
-    def __init__(self, input_bucket):
+    def __init__(self, input_bucket, skip_header_lines:str=1):
         super().__init__()
         self.input_bucket = input_bucket
+        self.skip_header_lines = skip_header_lines
 
     def expand(self, pcoll):
         return (
             pcoll
-            | 'ReadFromText' >> beam.io.ReadFromText(self.input_bucket)
+            | 'ReadFromText' >> beam.io.ReadFromText(self.input_bucket, skip_header_lines=self.skip_header_lines)
         )
     
 class IOWriteToText(beam.PTransform):
@@ -23,7 +24,7 @@ class IOWriteToText(beam.PTransform):
     This transform is used to write a PCollection to a text file
     """
 
-    def __init__(self, output_bucket):
+    def __init__(self, output_bucket:str):
         super().__init__()
         self.output_bucket = output_bucket
 

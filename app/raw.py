@@ -5,7 +5,7 @@ import time
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
-from src.modules.raw_transforms import StandarizeHeader
+from src.modules.raw_transforms import SplitRawLineToDict
 from src.modules.io_transforms import IOReadFromText, IOWriteToText
 from config import global_config as GC
 
@@ -42,10 +42,19 @@ def main(pipeline_options, args, date_calc):
             pcol_transform_applied.append(
                 pcol_transform_applied[i] | transform(
             ) """
+        prefix_step = 'Step 01 - Read, Transform and Write to Text'
         pcol_transform_applied = (p
-            | 'IOReadFromText' >> IOReadFromText(input_bucket=args.input_bucket)
-            #| 'StandarizeHeader' >> StandarizeHeader()
-            | 'IOWriteToText' >> IOWriteToText(output_bucket=args.output_bucket)
+            | f'{prefix_step} - IOReadFromText' >> IOReadFromText(input_bucket=args.input_bucket)
+            #| 'beam.map(split_raw_line_to_dict)' >> beam.Map(lambda row: split_raw_line_to_dict(row, header='Price_CLP,Price_UF,Price_USD,Comuna,Ubicacion,Dorms,Baths,Built Area,Total Area,Parking,id,Realtor', delimiter=','))
+            | f'{prefix_step} - SplitRawLineToDict' >> SplitRawLineToDict(
+                header='Price_CLP,Price_UF,Price_USD,Comuna,Ubicacion,Dorms,Baths,Built Area,Total Area,Parking,id,Realtor',
+                delimiter=',',
+                to_sanitize_header=True,
+                to_lower_case=True,
+                tag='SplitRawLineToDict'
+            )
+            #| 'SelectRenamedCreateIfNotExists' >> SelectRenamedCreateIfNotExists() #TODO: Implement this transform
+            | f'{prefix_step} - IOWriteToText' >> IOWriteToText(output_bucket=args.output_bucket)
         )
 
     

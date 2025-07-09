@@ -1,4 +1,19 @@
 import apache_beam as beam
+from config import constants
+
+def read_first_line_from_file(file_path: str) -> str:
+    """
+    Reads the first line from a file.
+    
+    Args:
+        file_path (str): The path to the file.
+        
+    Returns:
+        str: The first line of the file, or an empty string if the file is empty.
+    """
+    with open(file_path, 'r') as file:
+        first_line = file.readline().strip()
+    return first_line if first_line else constants.EMPTY_STR
 
 def sanitize_header(header: str, to_lower_case=True) -> str:
     """
@@ -43,6 +58,7 @@ def split_raw_line_to_dict(row, header=None, delimiter='|', to_sanitize_header=T
         splited_header = header.split(delimiter)
         return {splited_header[i]: value_col.strip() for i, value_col in enumerate(splited_row)}
 
+
 def upper_case_dict_keys(row):
     """
     Convert all keys in a dictionary to uppercase.
@@ -55,6 +71,7 @@ def upper_case_dict_keys(row):
     """
     return {k.upper(): v for k, v in row.items()}
 
+
 def lower_case_dict_keys(row):
     """
     Convert all keys in a dictionary to lowercase.
@@ -66,6 +83,19 @@ def lower_case_dict_keys(row):
         dict: A new dictionary with all keys converted to lowercase.
     """
     return {k.lower(): v for k, v in row.items()}
+
+def dict_to_row_concat(row: dict, delimiter='|') -> str:
+    """
+    Convert a dictionary to a string by concatenating its values with a specified delimiter.
+    
+    Args:
+        row (dict): A dictionary with string values.
+        delimiter (str, optional): The delimiter to use for concatenation. Defaults to '|'.
+    
+    Returns:
+        str: A string representation of the dictionary, with values concatenated by the delimiter.
+    """
+    return delimiter.join(str(value) if value is not None else constants.EMPTY_STR for value in row.values())
 
 class SplitRawLineToDict(beam.PTransform):
     """

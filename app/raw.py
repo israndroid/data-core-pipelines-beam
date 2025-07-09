@@ -5,8 +5,8 @@ import time
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
-from src.modules.raw_transforms import SplitRawLineToDict
-from src.modules.io_transforms import IOReadFromText, IOWriteToText
+from src.modules import raw_transforms
+from src.modules import io_transforms
 from config import global_config as GC
 
 def setup_options(argv=None, save_main_session=True):
@@ -43,18 +43,21 @@ def main(pipeline_options, args, date_calc):
                 pcol_transform_applied[i] | transform(
             ) """
         prefix_step = 'Step 01 - Read, Transform and Write to Text'
+        header = raw_transforms.read_first_line_from_file(args.input_bucket)
+        std_header = raw_transforms.sanitize_header(header, to_lower_case=True)
         pcol_transform_applied = (p
-            | f'{prefix_step} - IOReadFromText' >> IOReadFromText(input_bucket=args.input_bucket)
+            | f'{prefix_step} - IOReadFromText' >> io_transforms.IOReadFromText(input_bucket=args.input_bucket)
             #| 'beam.map(split_raw_line_to_dict)' >> beam.Map(lambda row: split_raw_line_to_dict(row, header='Price_CLP,Price_UF,Price_USD,Comuna,Ubicacion,Dorms,Baths,Built Area,Total Area,Parking,id,Realtor', delimiter=','))
-            | f'{prefix_step} - SplitRawLineToDict' >> SplitRawLineToDict(
-                header='Price_CLP,Price_UF,Price_USD,Comuna,Ubicacion,Dorms,Baths,Built Area,Total Area,Parking,id,Realtor',
+            | f'{prefix_step} - SplitRawLineToDict' >> raw_transforms.SplitRawLineToDict(
+                header=std_header,
                 delimiter=',',
-                to_sanitize_header=True,
+                to_sanitize_header=False,  # We already sanitized the header
                 to_lower_case=True,
                 tag='SplitRawLineToDict'
             )
+            | f'{prefix_step} - dict_to_row_concat' >> beam.Map(lambda row: raw_transforms.dict_to_row_concat(row, delimiter=','))
             #| 'SelectRenamedCreateIfNotExists' >> SelectRenamedCreateIfNotExists() #TODO: Implement this transform
-            | f'{prefix_step} - IOWriteToText' >> IOWriteToText(output_bucket=args.output_bucket)
+            | f'{prefix_step} - IOWriteToText' >> io_transforms.IOWriteToText(output_bucket=args.output_bucket, header=std_header, file_name_suffix='.txt')
         )
 
     

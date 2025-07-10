@@ -134,4 +134,3 @@ class SelectRenamedCreateIfNotExists(beam.PTransform):
     def expand(self, pcoll):
         return (pcoll
                 | 'Select and Rename Fields' >> beam.Map(lambda x: {self.field_mapping.get(k, k): v for k, v in x.items()}))
-

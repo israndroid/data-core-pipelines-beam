@@ -7,6 +7,7 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 from src.modules import raw_transforms
 from src.modules import io_transforms
+from src.utils.core import get_elapsed_time
 from config import global_config as GC
 
 def setup_options(argv=None, save_main_session=True):
@@ -67,9 +68,10 @@ if __name__ == '__main__':
     know_args, pipeline_options = setup_options(argv=None, save_main_session=True)
 
     start_time = time.time()
-    print(f'[start_time: {start_time}] Starting the pipeline... raw.py -> main()')
+    logging.info(f'[start_time: {start_time}] Starting the pipeline... raw.py -> main()')
     
     main(pipeline_options=pipeline_options, args=know_args, date_calc=know_args.date_calc)
+    time.sleep(10)
     end_time = time.time()
-
-    print(f'[end_time: {end_time}] Ending the pipeline... raw.py -> main()')
+    logging.info(f'[end_time: {end_time}] Ending the pipeline... raw.py -> main()')
+    logging.info(f'[Total elapsed time: {get_elapsed_time(start_time, end_time)}]')

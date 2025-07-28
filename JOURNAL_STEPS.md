@@ -6,12 +6,19 @@ A TDD core project to develop Apache Beam with Python SDK
 1. Create Venv
     ```
     # Create Venv
-    python -m venv /path/to/directory
+    python3 -m venv /path/to/directory
+
+    python3 -m venv
 
     # Activate venv
     . /path/to/directory/bin/activate
 
+    . venv/bin/activate
+
     source .venv/bin/activate
+
+    # Deactivate venv
+    deactivate
     ```
 2. Full list installs applied
     ```

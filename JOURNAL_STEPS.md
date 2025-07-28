@@ -56,9 +56,13 @@ A TDD core project to develop Apache Beam with Python SDK
     bash run_wordcount_minimal_ch1_les_miserables.sh
     ```
     
-    5.1 Run bash Tests: 
+    5.1 Run bash Tests/Coverage/Coverage Report and HTML: 
     ```
-    bash run_test_wordcount_minimal.sh 
+    python3 -m unittest discover
+    coverage run -m unittest discover
+    coverage report -m
+    coverage html
+
     ```
     or equivalent:
     ```

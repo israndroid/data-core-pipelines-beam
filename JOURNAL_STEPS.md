@@ -59,6 +59,7 @@ A TDD core project to develop Apache Beam with Python SDK
     5.1 Run bash Tests/Coverage/Coverage Report and HTML: 
     ```
     python3 -m unittest discover
+    pytest test/
     coverage run -m unittest discover
     coverage report -m
     coverage html

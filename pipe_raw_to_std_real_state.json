@@ -1,0 +1,42 @@
+{
+    "version": "0.0.0-dev",
+    "pipeline_type": "beam",
+    "pipeline_id": "pipe_raw_to_std_real_state",
+    "pipeline_name": "pipe_raw_to_std_real_state",
+    "description": "Pipeline to transform raw real estate data into example standardized ingest format",
+    "stages": [
+        {
+            "order": 0,
+            "stage_id": "step-00-read_raw_real_state",
+            "stage_name": "read_raw_real_state",
+            "stage_type": "source",
+            "module": "src.modules.io_transforms",
+            "source_class": "ReadCSVSource",
+            "input_pcollection": null,
+            "output_pcollection": "raw_real_state_data",
+            "params": {
+                "file_path": "/data/raw/real_state_data.csv",
+                "delimiter": ",",
+                "header": true
+            }
+        },
+        {
+            "order": 1,
+            "stage_id": "step-01-raw_to_std_real_state",
+            "stage_name": "raw_to_std_real_state",
+            "stage_type": "transform",
+            "module": "src.modules.raw_transforms",
+            "transform_class": "StandarizeCSV",
+            "params": {
+                "field_mapping": {
+                    "address": "property_address",
+                    "price": "listing_price",
+                    "bedrooms": "num_bedrooms",
+                    "bathrooms": "num_bathrooms",
+                    "area": "property_area",
+                    "listing_date": "date_listed"
+                }
+            }
+        }
+    ]
+} 

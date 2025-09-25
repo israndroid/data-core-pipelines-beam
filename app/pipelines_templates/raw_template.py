@@ -1,3 +1,15 @@
+"""
+version: {{pipe_config.version}}
+pipeline_name: {{pipe_config.pipeline_name}}
+-----------------
+{% for stage in stages %}
+    {{stage}}
+{% endfor %}
+
+-----------------
+"""
+
+
 import argparse
 from datetime import datetime, timedelta
 import logging
@@ -7,7 +19,6 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 from src.modules import raw_transforms
 from src.modules import io_transforms
-from src.utils.core import get_elapsed_time
 from config import global_config as GC
 
 def setup_options(argv=None, save_main_session=True):
@@ -48,7 +59,6 @@ def main(pipeline_options, args, date_calc):
         std_header = raw_transforms.sanitize_header(header, to_lower_case=True)
         pcol_transform_applied = (p
             | f'{prefix_step} - IOReadFromText' >> io_transforms.IOReadFromText(input_bucket=args.input_bucket)
-            #| 'beam.map(split_raw_line_to_dict)' >> beam.Map(lambda row: split_raw_line_to_dict(row, header='Price_CLP,Price_UF,Price_USD,Comuna,Ubicacion,Dorms,Baths,Built Area,Total Area,Parking,id,Realtor', delimiter=','))
             | f'{prefix_step} - SplitRawLineToDict' >> raw_transforms.SplitRawLineToDict(
                 header=std_header,
                 delimiter=',',
@@ -68,10 +78,9 @@ if __name__ == '__main__':
     know_args, pipeline_options = setup_options(argv=None, save_main_session=True)
 
     start_time = time.time()
-    logging.info(f'[start_time: {start_time}] Starting the pipeline... raw.py -> main()')
+    print(f'[start_time: {start_time}] Starting the pipeline... raw.py -> main()')
     
     main(pipeline_options=pipeline_options, args=know_args, date_calc=know_args.date_calc)
-    time.sleep(10)
     end_time = time.time()
-    logging.info(f'[end_time: {end_time}] Ending the pipeline... raw.py -> main()')
-    logging.info(f'[Total elapsed time: {get_elapsed_time(start_time, end_time)}]')
+
+    print(f'[end_time: {end_time}] Ending the pipeline... raw.py -> main()')

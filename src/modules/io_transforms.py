@@ -24,12 +24,14 @@ class IOWriteToText(beam.PTransform):
     This transform is used to write a PCollection to a text file
     """
 
-    def __init__(self, output_bucket:str):
+    def __init__(self, output_bucket:str, header=None, file_name_suffix='.txt', shard_name_template='-SSSSS-of-NNNNN'):
         super().__init__()
         self.output_bucket = output_bucket
+        self.header = header
+        self.file_name_suffix = file_name_suffix
 
     def expand(self, pcoll):
         return (
             pcoll
-            | 'WriteToText' >> beam.io.WriteToText(self.output_bucket)
+            | 'WriteToText' >> beam.io.WriteToText(self.output_bucket, header=self.header, file_name_suffix=self.file_name_suffix)
         )

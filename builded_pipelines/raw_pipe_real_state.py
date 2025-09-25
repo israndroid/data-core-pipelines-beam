@@ -1,3 +1,19 @@
+"""
+version: 0.0.0-dev
+pipeline_name: pipe_raw_to_std_real_state
+-----------------
+
+    {'order': 1, 'stage_id': 'step-01-read_raw_real_state', 'stage_name': 'read_raw_real_state', 'stage_type': 'source', 'module': 'src.modules.io_transforms', 'source_class': 'ReadCSVSource', 'input_pcollection': None, 'output_pcollection': 'raw_real_state_data', 'params': {'file_path': '/data/raw/real_state_data.csv', 'delimiter': ',', 'header': True}}
+
+    {'order': 2, 'stage_id': 'step-02-raw_to_std_real_state', 'stage_name': 'raw_to_std_real_state', 'stage_type': 'transform', 'module': 'src.modules.raw_transforms', 'transform_class': 'StandarizeCSV', 'params': {'field_mapping': {'address': 'property_address', 'price': 'listing_price', 'bedrooms': 'num_bedrooms', 'bathrooms': 'num_bathrooms', 'area': 'property_area', 'listing_date': 'date_listed'}}}
+
+    {'order': 3, 'stage_id': 'step-03-raw_to_std_real_state', 'stage_name': 'raw_to_std_real_state', 'stage_type': 'transform', 'module': 'src.modules.raw_transforms', 'transform_class': 'StandarizeCSV', 'params': {'field_mapping': {'address': 'property_address', 'price': 'listing_price', 'bedrooms': 'num_bedrooms', 'bathrooms': 'num_bathrooms', 'area': 'property_area', 'listing_date': 'date_listed'}}}
+
+
+-----------------
+"""
+
+
 import argparse
 from datetime import datetime, timedelta
 import logging
@@ -7,7 +23,6 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 from src.modules import raw_transforms
 from src.modules import io_transforms
-from src.utils.core import get_elapsed_time
 from config import global_config as GC
 
 def setup_options(argv=None, save_main_session=True):
@@ -48,7 +63,6 @@ def main(pipeline_options, args, date_calc):
         std_header = raw_transforms.sanitize_header(header, to_lower_case=True)
         pcol_transform_applied = (p
             | f'{prefix_step} - IOReadFromText' >> io_transforms.IOReadFromText(input_bucket=args.input_bucket)
-            #| 'beam.map(split_raw_line_to_dict)' >> beam.Map(lambda row: split_raw_line_to_dict(row, header='Price_CLP,Price_UF,Price_USD,Comuna,Ubicacion,Dorms,Baths,Built Area,Total Area,Parking,id,Realtor', delimiter=','))
             | f'{prefix_step} - SplitRawLineToDict' >> raw_transforms.SplitRawLineToDict(
                 header=std_header,
                 delimiter=',',
@@ -68,10 +82,9 @@ if __name__ == '__main__':
     know_args, pipeline_options = setup_options(argv=None, save_main_session=True)
 
     start_time = time.time()
-    logging.info(f'[start_time: {start_time}] Starting the pipeline... raw.py -> main()')
+    print(f'[start_time: {start_time}] Starting the pipeline... raw.py -> main()')
     
     main(pipeline_options=pipeline_options, args=know_args, date_calc=know_args.date_calc)
-    time.sleep(10)
     end_time = time.time()
-    logging.info(f'[end_time: {end_time}] Ending the pipeline... raw.py -> main()')
-    logging.info(f'[Total elapsed time: {get_elapsed_time(start_time, end_time)}]')
+
+    print(f'[end_time: {end_time}] Ending the pipeline... raw.py -> main()')

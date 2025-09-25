@@ -72,11 +72,11 @@ pipeline_config_template = {
 } 
 
 environment = Environment(loader=FileSystemLoader("app/pipelines_templates/"))
-template = environment.get_template("raw_template.py")
+template = environment.get_template("pipe_template.py")
 pipeline_builder_output_path = "builded_pipelines/"
 os.makedirs(pipeline_builder_output_path, exist_ok=True)
 
-filename = f"raw_pipe_real_state.py"
+filename = f"wip_pipe_real_state.py"
 stages = pipeline_config_template.get('stages', []) 
 if stages != []:
     content = template.render(
